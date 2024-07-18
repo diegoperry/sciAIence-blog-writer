@@ -49,12 +49,6 @@ class AppAgents:
             verbose=True,
         )
     
-
-###########################################################################################
-# Print agent process to Streamlit app container                                          #
-# This portion of the code is adapted from @AbubakrChan; thank you!                       #
-# https://github.com/AbubakrChan/crewai-UI-business-product-launch/blob/main/main.py#L210 #
-###########################################################################################
 class StreamToExpander:
     def __init__(self, expander):
         self.expander = expander

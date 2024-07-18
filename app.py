@@ -25,54 +25,76 @@ class MyCrew:
         self.output_placeholder = st.empty()
 
     def run(self):
-        agents = AppAgents()
-        tasks = AppTasks()
+        agents = AppAgents()  # Instantiate agents
+        tasks = AppTasks()  # Instantiate tasks
 
+        # Define the agents
         researcher_agent = agents.researcher_agent()
         writer_agent = agents.writer_agent()
         quality_agent = agents.quality_agent()
 
+        # Define the tasks
         research_task = tasks.research_task(
             researcher_agent,
             self.topic,
-            self.complexity,
             self.interests,
+            self.complexity,
         )
 
         write_task = tasks.write_task(
             writer_agent,
             self.topic,
-            self.complexity,
             self.interests,
+            self.complexity,
         )
 
         check_task = tasks.check_task(
             quality_agent,
             self.topic,
-            self.complexity,
             self.interests,
+            self.complexity,
         )
 
         rewrite_task = tasks.rewrite_task(
-            quality_agent,
+            writer_agent,  # Use writer_agent for rewriting
             self.topic,
-            self.complexity,
             self.interests,
+            self.complexity,
         )
 
+        # Define the crew with the agents and tasks
         crew = Crew(
-            agents=[
-                researcher_agent, writer_agent, quality_agent
-            ],
-            tasks=[research_task, write_task, check_task,rewrite_task],
+            agents=[researcher_agent, writer_agent, quality_agent],
+            tasks=[research_task, write_task, check_task, rewrite_task],
             verbose=True
-
         )
 
+        # Kick off the crew process and get the result
         result = crew.kickoff()
-        self.output_placeholder.markdown(result)
 
-        return result
+        # Debugging: Print the result to inspect its structure
+        print("DEBUG: Result Structure:", result)
+
+        # Attempt to parse the result based on its structure
+        try:
+            # If result is a dictionary with 'tasks', access the output of the last task
+            if isinstance(result, dict) and 'tasks' in result:
+                final_output = result['tasks'][-1]['output']
+            # If result is a list, access the output of the last element
+            elif isinstance(result, list):
+                final_output = result[-1]['output']
+            # If result is a string, use it directly
+            elif isinstance(result, str):
+                final_output = result
+            else:
+                final_output = "Unexpected result format"
+        except Exception as e:
+            print("DEBUG: Error accessing final output:", e)
+            final_output = "Error processing the result"
+
+        # Display the final output
+        self.output_placeholder.markdown(final_output)
+        return final_output
 
 
 if __name__ == "__main__":
@@ -81,11 +103,7 @@ if __name__ == "__main__":
     st.subheader("🤖 Let a team of specialized AI agents research and write your scientific blog!",
                  divider="rainbow", anchor=False)
 
-    import datetime
 
-    today = datetime.datetime.now().date()
-    next_year = today.year + 1
-    jan_16_next_year = datetime.date(next_year, 1, 10)
 
     with st.sidebar:
         st.header("👇 Enter your blog details")
@@ -103,7 +121,6 @@ if __name__ == "__main__":
         st.divider()
 
         st.sidebar.info("Built with CrewAI and Streamlit by Diego Perry", icon="🔭")
-
 
 if submitted:
     with st.status("🤖 **Agents at work...**", state="running", expanded=True) as status:

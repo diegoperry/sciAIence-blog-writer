@@ -32,12 +32,11 @@ class AppTasks:
           Complexity of blog: {complexity}
           """,
             expected_output="A well-organized and engaging article, article should not be more than 250 words",
-            context=[self.research_task],
             agent=agent)
 
     def check_task(self, agent, topic, interests, complexity):
         return Task(description=f"""
-          Review and verify the accuracy of scientific content based on specific criteria such as 
+          Review and verify the accuracy of the blog post based on specific criteria such as 
           recent advancements, key discoveries, and influential experiments. 
           This task involves cross-referencing information with credible sources, 
           including scientific journals, articles, and expert statements. 
@@ -50,9 +49,8 @@ class AppTasks:
           Complexity of blog: {complexity}
           """,
             expected_output="A list of areas where the writing or facts need to be improved, if a fact is wrong give the updated fact.",
-            context=[self.research_task, self.write_task],
             agent=agent)
-    
+
     def rewrite_task(self, agent, topic, interests, complexity):
         return Task(description=f"""
           Revise and improve the blog post based on the feedback provided by the quality checker. 
@@ -62,10 +60,8 @@ class AppTasks:
           Areas that should be highlighted: {interests}
           Complexity of blog: {complexity}
           """,
-            expected_output="A well-organized and engaging article, article should not be more than 250 words",
-            context=[self.research_task, self.write_task, self.check_task],
+            expected_output="A revised and polished article, incorporating all necessary corrections and improvements.",
             agent=agent)
-
 
     def __tip_section(self):
         return "If you do your BEST WORK, I'll tip you $100 and grant you any wish you want!"
