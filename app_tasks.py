@@ -32,6 +32,7 @@ class AppTasks:
           Complexity of blog: {complexity}
           """,
             expected_output="A well-organized and engaging article, article should not be more than 250 words",
+            context=[self.research_task],
             agent=agent)
 
     def check_task(self, agent, topic, interests, complexity):
@@ -49,6 +50,20 @@ class AppTasks:
           Complexity of blog: {complexity}
           """,
             expected_output="A list of areas where the writing or facts need to be improved, if a fact is wrong give the updated fact.",
+            context=[self.research_task, self.write_task],
+            agent=agent)
+    
+    def rewrite_task(self, agent, topic, interests, complexity):
+        return Task(description=f"""
+          Revise and improve the blog post based on the feedback provided by the quality checker. 
+          This task involves making necessary corrections and enhancements to ensure the content is factually accurate, 
+          clear, and engaging. The final output should be a polished and well-written article.
+          Topic interested in: {topic}
+          Areas that should be highlighted: {interests}
+          Complexity of blog: {complexity}
+          """,
+            expected_output="A well-organized and engaging article, article should not be more than 250 words",
+            context=[self.research_task, self.write_task, self.check_task],
             agent=agent)
 
 
