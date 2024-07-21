@@ -4,3 +4,4 @@ openai
 unstructured
 pyowm
 tools
+streamlit-cookies-manager
