@@ -5,3 +5,4 @@ unstructured
 pyowm
 tools
 streamlit-cookies-manager
+stripe
